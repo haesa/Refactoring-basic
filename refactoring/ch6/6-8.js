@@ -1,5 +1,5 @@
-export function readingsOutsideRange(station, min, max) {
-  return station.readings.filter((r) => r.temp < min || r.temp > max);
+export function readingsOutsideRange(station, range) {
+  return station.readings.filter((r) => r.temp < range.temperatureFloor || r.temp > range.temperatureCeiling);
 }
 
 const station = {
@@ -17,8 +17,6 @@ const operationPlan = {
   temperatureCeiling: 53,
 };
 
-readingsOutsideRange(
-  station,
-  operationPlan.temperatureFloor,
-  operationPlan.temperatureCeiling
-);
+const result = readingsOutsideRange(station,operationPlan);
+
+console.log(result);
