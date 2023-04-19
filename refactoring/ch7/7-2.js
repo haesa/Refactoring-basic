@@ -10,12 +10,23 @@ export class Person {
     return this.#name;
   }
 
+  // 읽기만 한다면 원본 데이터를 수정할 수 없게 복사본 제공
   get courses() {
-    return this.#courses;
+    return [...this.#courses];
   }
 
-  set courses(courses) {
-    this.#courses = courses;
+  // 수정해야 한다면 제한된 기능만을 하는 메소드 제공
+  addCourse(course) {
+    this.#courses.push(course);
+  }
+
+  removeCourse(course, runIfAbsent) {
+    const index = this.#courses.indexOf(course);
+    if (index === -1) {
+      runIfAbsent();
+      return;
+    }
+    this.#courses.splice(index, 1);
   }
 }
 
@@ -37,5 +48,9 @@ export class Course {
 }
 
 const ellie = new Person('엘리');
-ellie.courses.push(new Course('리팩토링', true));
+const course = new Course('리팩토링', true);
+ellie.addCourse(course);
 console.log(ellie.courses.length);
+ellie.removeCourse(course, () => console.log('해당 코스는 없다!'));
+console.log(ellie.courses.length);
+ellie.removeCourse(course, () => console.log('해당 코스는 없다!'));
